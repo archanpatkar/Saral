@@ -1,6 +1,6 @@
 # JISP
-### A Lispy Language 
-### It uses JSON for its syntax, it can be used as a Compilation Target Language.
+### A Lisp like Language which uses S - Expressions
+### Its Syntax is in JSON, it can be used as a Compilation Target Language.
 
 ## Example
 ```
