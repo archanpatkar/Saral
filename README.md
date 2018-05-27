@@ -2,6 +2,24 @@
 ### A Lispy Language 
 ### It uses JSON for its syntax, it can be used as a Target Language.
 
+## Example
+```json
+[
+    [
+        "begin", 
+        
+        [
+            "define", "f1", 
+                ["lambda", [],
+                    ["print", '"F1 !!!!"']
+                ]
+        ], 
+        
+        ["f1"]
+    ]
+]
+```
+
 ## Use Case
 ### The T - diagram or [Tombstone diagram](https://en.wikipedia.org/wiki/Tombstone_diagram),
 #### 1. where S is any Source Language,
