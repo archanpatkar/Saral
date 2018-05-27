@@ -157,18 +157,28 @@ const env = new Env(null, null, null, {
 });
 
 
+// ["begin", ["**", 10, 2]],
+// ["begin", ' "hello" '],
+// ["begin", ["define", "i", 10]],
+// ["list", 10, 20, 30, 40, 50],
+// ["begin", ["define", "j", 100],
+//     ["print", "j"]
+// ],
+
+
 let codes = [
-    ["begin", ["**", 10, 2]],
-    ["begin", ' "hello" '],
-    ["begin", ["define", "i", 10]],
-    ["list", 10, 20, 30, 40, 50],
-    ["begin", ["define", "j", 100],
-        ["print", "j"]
-    ],
-    ["begin", ["define", "f1", ["lambda", [],
-        ["print", '"F1 !!!!"']
-    ]]],
-    ["f1"]
+    [
+        "begin", 
+        
+        [
+            "define", "f1", 
+                ["lambda", [],
+                    ["print", '"F1 !!!!"']
+                ]
+        ], 
+        
+        ["f1"]
+    ]
 ];
 
 for (let e in codes) {
