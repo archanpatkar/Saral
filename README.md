@@ -3,7 +3,7 @@
 ### It uses JSON for its syntax, it can be used as a Target Language.
 
 ## Example
-```json
+```
 [
     [
         "begin", 
