@@ -42,12 +42,6 @@ class LFunction {
     }
 }
 
-
-function print(string) {
-    // console.log("In Print!");
-    console.log(string);
-}
-
 let keywords = ["begin", "lambda", "if", "set!"];
 
 function isPrimitive(value) {
@@ -146,6 +140,44 @@ function eval(code, env) {
     }
 }
 
+function print(string) {
+    console.log(string);
+}
+
+function min(x,y) 
+{
+    if(x > y)
+    {
+        return y;
+    }
+    else if(x < y)
+    {
+        return x;
+    }
+    else if(x == y)
+    {
+        return x;
+    }
+}
+
+
+function max(x,y) 
+{
+    if(x > y)
+    {
+        return x;
+    }
+    else if(x < y)
+    {
+        return y;
+    }
+    else if(x == y)
+    {
+        return x;
+    }
+}
+
+
 const env = new Env(null, null, null, {
     "print": print,
     "+": (x, y) => x + y,
@@ -153,7 +185,19 @@ const env = new Env(null, null, null, {
     "*": (x, y) => x * y,
     "/": (x, y) => x / y,
     "**": (x, y) => x ** y,
-    "list": (...i) => [...i]
+    "rem": (x,y) => x % y,
+    "list": (...i) => [...i],
+    "=":(x,y) => x == y,
+    "/=": (x,y) => x != y,
+    ">": (x,y) => x > y,
+    "<": (x,y) => x < y,
+    ">=": (x,y) => x >= y,
+    "<=": (x,y) => x <= y,
+    "min": min,
+    "max": max,
+    "and": (x,y) => x && y,
+    "or": (x,y) => x || y,
+    "not": (x) => !x
 });
 
 
@@ -163,7 +207,7 @@ const env = new Env(null, null, null, {
 // ["list", 10, 20, 30, 40, 50],
 // ["begin", ["define", "j", 100],
 //     ["print", "j"]
-// ],
+// ]
 
 
 let codes = [
@@ -184,3 +228,8 @@ let codes = [
 for (let e in codes) {
     eval(codes[e], env);
 }
+
+// New Feautures to be added
+// Selections
+// Update Variables
+// Iterations
