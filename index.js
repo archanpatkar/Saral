@@ -100,6 +100,18 @@ function eval(code, env) {
         // console.log("After Evaling the Value");
         // console.log(env.env[name])
         return env.env[name];
+    } else if(code[0] == "update")
+    {
+        let [update, name, value] = code;
+        if(name in env.env)
+        {
+            env.env[name] = eval(value, env);
+        }
+        else
+        {
+            throw Error(`Variable ${name} is not Defined`);
+        }
+        return env.env[name];
     } else if (code[0] == "begin") {
         // console.log("In Begin");
         let [begin, ...block] = code;
@@ -108,16 +120,40 @@ function eval(code, env) {
         for (let exp of block) {
             // console.log("In Loop");
             // console.log("Current Expression = " + exp);
-            out.push(eval(exp, env));
+            const o = eval(exp, env);
+            if(o != undefined)
+            {
+                out.push(o);   
+            }
         }
         // console.log("After Loop");
         // console.log("Execution Evaluated To : " + out)
+        // console.log("Returning the last expression")
+        // console.log(out)
+        // console.log(out[out.length - 1]);
         return out[out.length - 1];
     } else if (code[0] == "lambda") {
+        // console.log("Function Found");
         [_, params, ...body] = code;
         //   console.log(env);
         return new LFunction(params, body, env);
-    } else {
+    } //else if(code[0] == "return")
+    // {
+    //     console.log("In Return!");
+    //     if(code.length == 1)
+    //     {
+    //         return;
+    //     }
+    //     else
+    //     {
+    //         console.log("Return with Expression");
+    //         let [ret,exp] = code;
+    //         console.log(code);
+    //         console.log(exp);
+    //         return eval(exp,env);
+    //     }
+    // } 
+    else {
         let [method, ...params] = code;
         // console.log("Method : " + method);
         // console.log("Params : " + params);
@@ -130,6 +166,7 @@ function eval(code, env) {
         // console.log(method);
         // console.log(call);
         if (call instanceof LFunction) {
+            // console.log(`Calling ${method}`);
             return call.execute(...evaled_params);
         } else if (call != undefined) {
             //    console.log("Inside Else") 
@@ -216,20 +253,57 @@ let codes = [
         
         [
             "define", "f1", 
-                ["lambda", [],
-                    ["print", '"F1 !!!!"']
+                [
+                    "lambda", [],
+                        [ "begin", 
+                            ["print",'"Entering F1!"'],
+                            ["lambda", [] , ["print",'"Function Literal!!"']]
+                        ]
                 ]
         ], 
         
-        ["f1"]
+        // ["f1"]
+        ["define" , "f2" , ["f1"]],
+        ["f2"],
+
+        // ["define", "f3" , ["lambda", [] , 10]],
+
+        // ["print" , ["f3"]]
+
     ]
 ];
 
 for (let e in codes) {
     eval(codes[e], env);
 }
+// console.log(env);
 
-// New Feautures to be added
-// Selections
-// Update Variables
-// Iterations
+
+//  __________________________________________________
+// |                                                  |
+// |       Language Level Features to be Added        | 
+// |                                                  |
+//  --------------------------------------------------
+
+// ********* Primitive Values and Types ************
+// Number
+// Boolean
+// String
+// Adding NULL
+// *************************************************
+
+// ********* Iterations ************
+// While Loop
+// For Loop
+// *********************************
+
+// ********* Selections ************
+// if then else
+// when
+// *********************************
+
+/*
+TODO: Update Variables ["update", "x" , expression] Done!
+TODO: Adding Return ["return", expression]
+TODO: Adding Boolean Primitives
+*/
