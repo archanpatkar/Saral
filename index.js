@@ -100,15 +100,11 @@ function eval(code, env) {
         // console.log("After Evaling the Value");
         // console.log(env.env[name])
         return env.env[name];
-    } else if(code[0] == "update")
-    {
+    } else if (code[0] == "update") {
         let [update, name, value] = code;
-        if(name in env.env)
-        {
+        if (name in env.env) {
             env.env[name] = eval(value, env);
-        }
-        else
-        {
+        } else {
             throw Error(`Variable ${name} is not Defined`);
         }
         return env.env[name];
@@ -121,9 +117,8 @@ function eval(code, env) {
             // console.log("In Loop");
             // console.log("Current Expression = " + exp);
             const o = eval(exp, env);
-            if(o != undefined)
-            {
-                out.push(o);   
+            if (o != undefined) {
+                out.push(o);
             }
         }
         // console.log("After Loop");
@@ -137,23 +132,18 @@ function eval(code, env) {
         [_, params, ...body] = code;
         //   console.log(env);
         return new LFunction(params, body, env);
-    } //else if(code[0] == "return")
-    // {
-    //     console.log("In Return!");
-    //     if(code.length == 1)
-    //     {
-    //         return;
-    //     }
-    //     else
-    //     {
-    //         console.log("Return with Expression");
-    //         let [ret,exp] = code;
-    //         console.log(code);
-    //         console.log(exp);
-    //         return eval(exp,env);
-    //     }
-    // } 
-    else {
+    } else if (code[0] == "return") {
+        console.log("In Return!");
+        if (code.length == 1) {
+            return;
+        } else {
+            console.log("Return with Expression");
+            let [ret, exp] = code;
+            console.log(code);
+            console.log(exp);
+            return eval(exp, env);
+        }
+    } else {
         let [method, ...params] = code;
         // console.log("Method : " + method);
         // console.log("Params : " + params);
@@ -167,7 +157,9 @@ function eval(code, env) {
         // console.log(call);
         if (call instanceof LFunction) {
             // console.log(`Calling ${method}`);
-            return call.execute(...evaled_params);
+            const retvalue = call.execute(...evaled_params);
+            console.log(retvalue);
+            return retvalue;
         } else if (call != undefined) {
             //    console.log("Inside Else") 
             //    console.log(call);
@@ -181,35 +173,23 @@ function print(string) {
     console.log(string);
 }
 
-function min(x,y) 
-{
-    if(x > y)
-    {
+function min(x, y) {
+    if (x > y) {
         return y;
-    }
-    else if(x < y)
-    {
+    } else if (x < y) {
         return x;
-    }
-    else if(x == y)
-    {
+    } else if (x == y) {
         return x;
     }
 }
 
 
-function max(x,y) 
-{
-    if(x > y)
-    {
+function max(x, y) {
+    if (x > y) {
         return x;
-    }
-    else if(x < y)
-    {
+    } else if (x < y) {
         return y;
-    }
-    else if(x == y)
-    {
+    } else if (x == y) {
         return x;
     }
 }
@@ -222,18 +202,18 @@ const env = new Env(null, null, null, {
     "*": (x, y) => x * y,
     "/": (x, y) => x / y,
     "**": (x, y) => x ** y,
-    "rem": (x,y) => x % y,
+    "rem": (x, y) => x % y,
     "list": (...i) => [...i],
-    "=":(x,y) => x == y,
-    "/=": (x,y) => x != y,
-    ">": (x,y) => x > y,
-    "<": (x,y) => x < y,
-    ">=": (x,y) => x >= y,
-    "<=": (x,y) => x <= y,
+    "=": (x, y) => x == y,
+    "/=": (x, y) => x != y,
+    ">": (x, y) => x > y,
+    "<": (x, y) => x < y,
+    ">=": (x, y) => x >= y,
+    "<=": (x, y) => x <= y,
     "min": min,
     "max": max,
-    "and": (x,y) => x && y,
-    "or": (x,y) => x || y,
+    "and": (x, y) => x && y,
+    "or": (x, y) => x || y,
     "not": (x) => !x
 });
 
@@ -248,29 +228,25 @@ const env = new Env(null, null, null, {
 
 
 let codes = [
+    "begin",
+
     [
-        "begin", 
-        
-        [
-            "define", "f1", 
-                [
-                    "lambda", [],
-                        [ "begin", 
-                            ["print",'"Entering F1!"'],
-                            ["lambda", [] , ["print",'"Function Literal!!"']]
-                        ]
-                ]
-        ], 
-        
-        // ["f1"]
-        ["define" , "f2" , ["f1"]],
-        ["f2"],
+        "define", "f1", [
+            "lambda", [],
+                ["print", '"hi"']
+        ]
+    ],
 
-        // ["define", "f3" , ["lambda", [] , 10]],
+    // ["lambda", [] , ["print",'"Function Literal!!"']
 
-        // ["print" , ["f3"]]
+    // ["f1"]
 
-    ]
+    // ["print" , ["f1"]]
+    // ["f2"],
+
+    // ["define", "f3", ["f1"]],
+
+    // ["print" , ["f3"]]
 ];
 
 for (let e in codes) {
