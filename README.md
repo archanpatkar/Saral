@@ -1,6 +1,7 @@
 # JISP
-### A Lisp like Language which uses S - Expressions
-### Its Syntax is in JSON, it can be used as a Compilation Target Language or Intermediate Representation (IR).
+### A Lisp like Language which uses S - Expressions.
+### Its Syntax is in JSON.
+### It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
 
 ## Example
 ```
