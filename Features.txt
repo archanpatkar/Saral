@@ -1,0 +1,38 @@
+//  __________________________________________________
+// |                                                  |
+// |       Language Level Features to be Added        | 
+// |                                                  |
+//  --------------------------------------------------
+
+// ********* Primitive Values and Types ************
+// Number
+// Boolean
+// String
+// Adding NULL
+// *************************************************
+
+// ********* Iterations ************
+// While Loop
+// For Loop
+// *********************************
+
+// ********* Selections ************
+// if then else
+// when
+// switch case
+// *********************************
+
+// ********* Objects ************
+// Adding Support for JSON like Tables
+// Adding Support for Traditional Objects using Class
+// *********************************
+
+// ********* Modules ************
+// Adding Support for Python like Modules
+// *********************************
+
+/*
+TODO: Update Variables ["update", "x" , expression] Done!
+TODO: Adding Return ["return", expression]
+TODO: Adding Boolean Primitives Done!
+*/
