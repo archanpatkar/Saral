@@ -21,7 +21,7 @@ class Env {
 }
 
 
-class LFunction {
+class JFunctor {
     constructor(params, body, env) {
         this.params = params;
         this.body = body;
@@ -102,7 +102,7 @@ function eval(code, env) {
         return out[out.length - 1];
     } else if (code[0] == "lambda") {
         [_ , params, body] = code;
-        return new LFunction(params, body, env);
+        return new JFunctor(params, body, env);
     }
     else if(code[0] == "invoke")
     {
@@ -133,7 +133,7 @@ function eval(code, env) {
         for (let p of params) {
             evaled_params.push(eval(p, env));
         }
-        if (call instanceof LFunction) {
+        if (call instanceof JFunctor) {
             return call.execute(...evaled_params);
         } else if (call != undefined) {
             return call(...evaled_params);
