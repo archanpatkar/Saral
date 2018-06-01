@@ -18,6 +18,20 @@ class Env {
             return this.outer.find(variable);
         }
     }
+
+    update(variable,value) {
+        if (variable in this.env) {
+            this.env[variable] = value;
+            return this.env[variable];
+        } else if (this.outer != null || this.outer != undefined) {
+            return this.outer.update(variable,value);
+        }
+    }
+
+    create(variable,value)
+    {
+        this.env[variable] = value;
+    }
 }
 
 
@@ -31,6 +45,50 @@ class JFunctor {
     execute(args) {
         const env = new Env(this.params, args, this.env, null);    
         return eval(this.body, env);
+    }
+}
+
+class JWhile {
+    constructor(condition, body, env) {
+        this.condition = condition;
+        this.body = body;
+        this.env = env;
+    }
+
+    execute() {
+        const env = new Env(null, null, this.env, {});  
+
+        while(eval(this.condition, env) != false)
+        {
+            eval(this.body,env);
+        }
+        return;
+    }
+}
+
+class JFor {
+    constructor(varname, list , body, env) {
+        this.varname = varname;
+        this.list = list;
+        this.body = body;
+        this.env = env;
+    }
+
+    execute() {
+        const env = new Env(null, null, this.env, {});    
+        env.create(this.varname,eval(0,env));
+        for(let i of this.list.list)
+        {
+            env.update(this.varname,i);
+            eval(this.body,env);
+        }
+        return;
+    }
+}
+
+class JList {
+    constructor(list) {
+        this.list = list;
     }
 }
 
@@ -84,12 +142,7 @@ function eval(code, env) {
         return env.env[name];
     } else if (code[0] == "update") {
         let [update, name, value] = code;
-        if (name in env.env) {
-            env.env[name] = eval(value, env);
-        } else {
-            throw Error(`Variable ${name} is not Defined`);
-        }
-        return env.env[name];
+        return env.update(name,eval(value,env));
     } else if (code[0] == "begin") {
         let [begin, ...block] = code;
         let out = [];
@@ -100,11 +153,25 @@ function eval(code, env) {
             }
         }
         return out[out.length - 1];
+    } else if (code[0] == "while") {
+        [_ , condition, body] = code;
+        loop = new JWhile(condition, body, env);
+        loop.execute();
+        return;
+    } else if (code[0] == "for") {
+        [_ , varname , __ , list , body] = code;
+        const jlist = eval(list,env);
+        loop = new JFor(varname , jlist , body, env);
+        loop.execute();
+        return;
     } else if (code[0] == "lambda") {
         [_ , params, body] = code;
         return new JFunctor(params, body, env);
-    }
-    else if(code[0] == "invoke")
+    } else if (code[0] == "defun") {
+        [_ , name , params, body] = code;
+        env.env[name] = new JFunctor(params, body, env);
+        return env.env[name];
+    } else if(code[0] == "invoke")
     {
         [ _ , func , args] = code;
         let evaled_params = [];
@@ -127,15 +194,16 @@ function eval(code, env) {
     //     }
     //}
     else {
-        let [method, ...params] = code;
-        let call = eval(method, env);
+        let [func, ...params] = code;
+        let call = eval(func, env);
         let evaled_params = [];
         for (let p of params) {
             evaled_params.push(eval(p, env));
         }
         if (call instanceof JFunctor) {
             return call.execute(...evaled_params);
-        } else if (call != undefined) {
+        } 
+        else if (call != undefined) {
             return call(...evaled_params);
         }
     }
@@ -166,16 +234,27 @@ function max(x, y) {
     }
 }
 
+function range(s = 0,e = 0,offset = 1)
+{
+    const r = [];
+    for(let i = s; i < e; i = i + offset)
+    {
+        r.push(i);
+    }
+    return r;
+}
 
-const env = new Env(null, null, null, {
+
+const MAIN_ENV = new Env(null, null, null, {
     "print": print,
     "+": (x, y) => x + y,
+    "++": (x) => x + 1,
     "-": (x, y) => x - y,
     "*": (x, y) => x * y,
     "/": (x, y) => x / y,
     "**": (x, y) => x ** y,
     "rem": (x, y) => x % y,
-    "list": (...i) => [...i],
+    "list": (...i) => new JList([...i]),
     "=": (x, y) => x == y,
     "/=": (x, y) => x != y,
     ">": (x, y) => x > y,
@@ -190,24 +269,36 @@ const env = new Env(null, null, null, {
 });
 
 
-let testinginvoke = [ 
+let code = [ 
     "begin",
 
     ["print" , '"Testing Invoke"'],
 
-    [
-        "define", "f1", [
-            "lambda", [],
-                [ "begin",
-                    ["print" , '"Entering f1"'],
-                    [ "invoke" , ["lambda",["x","y"],["print", ["+","x","y"]]] , [10,20] ],
-                    ["print" , '"Leaving f1"']
-                ]
-        ]       
+    [ "defun" , "f1" , [],
+        [ "begin",
+            ["print" , '"Entering f1"'],
+            [ "invoke" , ["lambda",["x","y"],["print", ["+","x","y"]]] , [10,20] ],
+            ["print" , '"Leaving f1"']
+        ]  
     ],
 
-    ["f1"]
+    ["f1"],
+
+    ["define","i",0],
+
+    ["print" , [ "+" , '"i = "' , "i" ] ],
+
+    [ "while" , ["/=","i",10] , 
+        [ "begin", 
+            [ "print",'"Hello"' ],
+            [ "update" , "i" , ["++","i"] ] 
+        ] 
+    ],
+
+    ["define", "l1", ["list",10,20,30,40,50,60]],
+
+    ["for", "i", "in", "l1",  ["begin", ["print","i"]]]
 
 ];
 
-eval(testinginvoke,env);
+eval(code,MAIN_ENV);
