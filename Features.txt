@@ -1,6 +1,6 @@
   __________________________________________________
  |                                                  |
- |       Language Level Features to be Added        | 
+ |       Language Level Features to be Added        |
  |                                                  |
   --------------------------------------------------
 
@@ -15,13 +15,13 @@ RETURN Expressions
  *************************************************
 
  ********* Iterations ************
-            While Loop
-            For Loop
+            While Loop - DONE
+            For Loop - DONE
  *********************************
 
  ********* Selections ************
             if then else
-            when
+            when - DONE
             switch case
  *********************************
 
@@ -36,4 +36,3 @@ RETURN Expressions
 
 
  ??? Iterable Literal ???
-
