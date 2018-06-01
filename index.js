@@ -43,7 +43,7 @@ class JFunctor {
     }
 
     execute(args) {
-        const env = new Env(this.params, args, this.env, null);    
+        const env = new Env(this.params, args, this.env, null);
         return eval(this.body, env);
     }
 }
@@ -56,7 +56,7 @@ class JWhile {
     }
 
     execute() {
-        const env = new Env(null, null, this.env, {});  
+        const env = new Env(null, null, this.env, {});
 
         while(eval(this.condition, env) != false)
         {
@@ -75,7 +75,7 @@ class JFor {
     }
 
     execute() {
-        const env = new Env(null, null, this.env, {});    
+        const env = new Env(null, null, this.env, {});
         env.create(this.varname,eval(0,env));
         for(let i of this.list.list)
         {
@@ -89,6 +89,24 @@ class JFor {
 class JList {
     constructor(list) {
         this.list = list;
+    }
+}
+
+class JWhen {
+    constructor(condition, body, env) {
+        this.condition = condition;
+        this.body = body;
+        this.env = env;
+    }
+
+    execute() {
+        const env = new Env(null, null, this.env, {});
+
+        if(eval(this.condition, env) == true)
+        {
+            eval(this.body,env);
+        }
+        return;
     }
 }
 
@@ -112,6 +130,8 @@ function isPrimitive(value) {
             if (value[0] == '"') isString = true;
         }
         return isString;
+    } else if (value instanceof JList) {
+        return true;
     } else {
         return false;
     }
@@ -180,6 +200,12 @@ function eval(code, env) {
         }
         lfunc = eval(func,env);
         return lfunc.execute(evaled_params);
+    } else if(code[0] == "when")
+    {
+        [ _ , condition , body] = code;
+        when = new JWhen(condition, body, env);
+        when.execute();
+        return;
     }
     //else if (code[0] == "return") {
     //     console.log("In Return!");
@@ -202,7 +228,7 @@ function eval(code, env) {
         }
         if (call instanceof JFunctor) {
             return call.execute(...evaled_params);
-        } 
+        }
         else if (call != undefined) {
             return call(...evaled_params);
         }
@@ -269,7 +295,8 @@ const MAIN_ENV = new Env(null, null, null, {
 });
 
 
-let code = [ 
+let code =
+[
     "begin",
 
     ["print" , '"Testing Invoke"'],
@@ -279,7 +306,7 @@ let code = [
             ["print" , '"Entering f1"'],
             [ "invoke" , ["lambda",["x","y"],["print", ["+","x","y"]]] , [10,20] ],
             ["print" , '"Leaving f1"']
-        ]  
+        ]
     ],
 
     ["f1"],
@@ -288,17 +315,22 @@ let code = [
 
     ["print" , [ "+" , '"i = "' , "i" ] ],
 
-    [ "while" , ["/=","i",10] , 
-        [ "begin", 
+    [ "while" , ["/=","i",10] ,
+        [ "begin",
             [ "print",'"Hello"' ],
-            [ "update" , "i" , ["++","i"] ] 
-        ] 
+            [ "update" , "i" , ["++","i"] ]
+        ]
     ],
 
     ["define", "l1", ["list",10,20,30,40,50,60]],
 
-    ["for", "i", "in", "l1",  ["begin", ["print","i"]]]
+    ["for", "i", "in", "l1",
+      ["begin",
+        ["print","i"]
+      ]
+    ],
 
+    ["when",["=","i",10],["begin",["print",'"SAME!"']]]
 ];
 
 eval(code,MAIN_ENV);
