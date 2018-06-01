@@ -34,3 +34,6 @@ RETURN Expressions
  Adding Support for Python like Modules
  *********************************
 
+
+ ??? Iterable Literal ???
+
