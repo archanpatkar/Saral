@@ -92,7 +92,7 @@ class JList {
     }
 }
 
-class JWhen {
+class JIf {
     constructor(condition, body, env) {
         this.condition = condition;
         this.body = body;
@@ -105,6 +105,29 @@ class JWhen {
         if(eval(this.condition, env) == true)
         {
             eval(this.body,env);
+        }
+        return;
+    }
+}
+
+class JIfElse {
+    constructor(condition, ifBody , elseBody , env) {
+        this.condition = condition;
+        this.ifBody = ifBody;
+        this.elseBody = elseBody;
+        this.env = env;
+    }
+
+    execute() {
+        const env = new Env(null, null, this.env, {});
+
+        if(eval(this.condition, env) == true)
+        {
+            eval(this.ifBody,env);
+        }
+        else
+        {
+            eval(this.elseBody,env);
         }
         return;
     }
@@ -200,11 +223,17 @@ function eval(code, env) {
         }
         lfunc = eval(func,env);
         return lfunc.execute(evaled_params);
-    } else if(code[0] == "when")
+    } else if(code[0] == "if" && code[3] == "else")
+    {
+        [ _ , condition , ifBlock , __ , elseBlock] = code;
+        IFELSE = new JIfElse(condition, ifBlock, elseBlock , env);
+        IFELSE.execute();
+        return;
+    } else if(code[0] == "if")
     {
         [ _ , condition , body] = code;
-        when = new JWhen(condition, body, env);
-        when.execute();
+        IF = new JIf(condition, body, env);
+        IF.execute();
         return;
     }
     //else if (code[0] == "return") {
@@ -330,7 +359,12 @@ let code =
       ]
     ],
 
-    ["when",["=","i",10],["begin",["print",'"SAME!"']]]
+    [
+      "if", ["=","i",50],
+        ["print",'"SAME!"'],
+      "else",
+        ["print",'"NOT SAME!"']
+    ]
 ];
 
 eval(code,MAIN_ENV);
