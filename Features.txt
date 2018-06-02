@@ -21,7 +21,7 @@ RETURN Expressions
 
  ********* Selections ************
             if then else
-            when - DONE
+            if - DONE
             switch case
  *********************************
 
