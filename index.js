@@ -34,7 +34,6 @@ class Env {
     }
 }
 
-
 class JFunctor {
     constructor(params, body, env) {
         this.params = params;
@@ -131,6 +130,18 @@ class JIfElse {
         }
         return;
     }
+}
+
+
+class JCluster
+{
+  constructor(name,body,env)
+  {
+    this.name = name;
+    this.body = body;
+    
+    this.env = env;
+  }
 }
 
 let keywords = ["begin", "lambda", "if", "set!"];
@@ -235,6 +246,9 @@ function eval(code, env) {
         IF = new JIf(condition, body, env);
         IF.execute();
         return;
+    } else if(code[0] == "export")
+    {
+
     }
     //else if (code[0] == "return") {
     //     console.log("In Return!");
@@ -310,6 +324,7 @@ const MAIN_ENV = new Env(null, null, null, {
     "**": (x, y) => x ** y,
     "rem": (x, y) => x % y,
     "list": (...i) => new JList([...i]),
+    "table": (...i) => new JTable([...i]),
     "=": (x, y) => x == y,
     "/=": (x, y) => x != y,
     ">": (x, y) => x > y,
@@ -364,7 +379,22 @@ let code =
         ["print",'"SAME!"'],
       "else",
         ["print",'"NOT SAME!"']
-    ]
+    ],
+
+    // ["define", "t1", ["table", ["x",10], ["y",10]] ],
+
+    ["cluster", "C1"
+      ["begin",
+        ["defun","f1",[]
+          ["begin",
+            ["print",'"F2!"']
+          ]
+        ]
+      ]
+    ],
+
+    ["C1","f1"]
+
 ];
 
 eval(code,MAIN_ENV);
