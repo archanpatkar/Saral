@@ -20,9 +20,9 @@ RETURN Expressions
  *********************************
 
  ********* Selections ************
-            if then else
+            if then else - DONE
             if - DONE
-            switch case
+            switch case - Deferred
  *********************************
 
  ********* Objects ************
