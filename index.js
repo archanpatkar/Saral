@@ -139,7 +139,7 @@ class JCluster
   {
     this.name = name;
     this.body = body;
-    
+
     this.env = env;
   }
 }
@@ -383,7 +383,7 @@ let code =
 
     // ["define", "t1", ["table", ["x",10], ["y",10]] ],
 
-    ["cluster", "C1"
+    ["declu", "C1"
       ["begin",
         ["defun","f1",[]
           ["begin",
