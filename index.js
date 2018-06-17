@@ -313,7 +313,6 @@ function range(s = 0,e = 0,offset = 1)
     return r;
 }
 
-
 const MAIN_ENV = new Env(null, null, null, {
     "print": print,
     "+": (x, y) => x + y,
@@ -338,63 +337,11 @@ const MAIN_ENV = new Env(null, null, null, {
     "not": (x) => !x
 });
 
+function ieval(code)
+{
+  eval(code,MAIN_ENV);
+}
 
-let code =
-[
-    "begin",
 
-    ["print" , '"Testing Invoke"'],
-
-    [ "defun" , "f1" , [],
-        [ "begin",
-            ["print" , '"Entering f1"'],
-            [ "invoke" , ["lambda",["x","y"],["print", ["+","x","y"]]] , [10,20] ],
-            ["print" , '"Leaving f1"']
-        ]
-    ],
-
-    ["f1"],
-
-    ["define","i",0],
-
-    ["print" , [ "+" , '"i = "' , "i" ] ],
-
-    [ "while" , ["/=","i",10] ,
-        [ "begin",
-            [ "print",'"Hello"' ],
-            [ "update" , "i" , ["++","i"] ]
-        ]
-    ],
-
-    ["define", "l1", ["list",10,20,30,40,50,60]],
-
-    ["for", "i", "in", "l1",
-      ["begin",
-        ["print","i"]
-      ]
-    ],
-
-    [
-      "if", ["=","i",50],
-        ["print",'"SAME!"'],
-      "else",
-        ["print",'"NOT SAME!"']
-    ],
-
-    // ["define", "t1", ["table", ["x",10], ["y",10]] ],
-
-    ["declu", "C1"
-      ["begin",
-        ["defun","f1",[]
-          ["begin",
-            ["print",'"F2!"']
-          ]
-        ]
-      ]
-    ],
-
-    ["C1","f1"]
-
-];
-
-eval(code,MAIN_ENV);
+// export
+module.exports = ieval;
