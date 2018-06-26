@@ -4,8 +4,8 @@
   "description": "A Lispy Language",
   "main": "index.js",
   "scripts": {
-    "start":"node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/archanpatkar/JISP/issues"
   },
-  "homepage": "https://github.com/archanpatkar/JISP#readme"
+  "homepage": "https://github.com/archanpatkar/JISP#readme",
+  "devDependencies": {
+    "jest": "^23.1.0"
+  }
 }
