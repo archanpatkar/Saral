@@ -47,6 +47,7 @@ let code =
     ["define", "C1" ,
       [ "cluster" ,
         ["begin",
+          ["define","v",10],
           ["defun","f1",["x","y"],
             ["begin",
               ["print",'"F2!"'],
@@ -58,7 +59,7 @@ let code =
       ]
     ],
 
-    ["C1", ["f1",10,20]]
+    [ "print" , ["C1", "v"] ]
 
     // ["declu", "C1"
     //   ["begin",
