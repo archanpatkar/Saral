@@ -43,7 +43,10 @@ class JFunctor {
 
     execute(args) {
         const env = new Env(this.params, args, this.env, null);
-        return eval(this.body, env);
+        // console.log("Inside Functor");
+        // console.log(this.params);
+        // console.log(args);
+        return Eval(this.body, env);
     }
 }
 
@@ -57,9 +60,9 @@ class JWhile {
     execute() {
         const env = new Env(null, null, this.env, {});
 
-        while(eval(this.condition, env) != false)
+        while(Eval(this.condition, env) != false)
         {
-            eval(this.body,env);
+            Eval(this.body,env);
         }
         return;
     }
@@ -75,11 +78,11 @@ class JFor {
 
     execute() {
         const env = new Env(null, null, this.env, {});
-        env.create(this.varname,eval(0,env));
+        env.create(this.varname,Eval(0,env));
         for(let i of this.list.list)
         {
             env.update(this.varname,i);
-            eval(this.body,env);
+            Eval(this.body,env);
         }
         return;
     }
@@ -101,9 +104,9 @@ class JIf {
     execute() {
         const env = new Env(null, null, this.env, {});
 
-        if(eval(this.condition, env) == true)
+        if(Eval(this.condition, env) == true)
         {
-            eval(this.body,env);
+            Eval(this.body,env);
         }
         return;
     }
@@ -120,13 +123,13 @@ class JIfElse {
     execute() {
         const env = new Env(null, null, this.env, {});
 
-        if(eval(this.condition, env) == true)
+        if(Eval(this.condition, env) == true)
         {
-            eval(this.ifBody,env);
+            Eval(this.ifBody,env);
         }
         else
         {
-            eval(this.elseBody,env);
+            Eval(this.elseBody,env);
         }
         return;
     }
@@ -135,16 +138,29 @@ class JIfElse {
 
 class JCluster
 {
-  constructor(name,body,env)
+  constructor(body,env)
   {
-    this.name = name;
     this.body = body;
+    this.env = new Env(null,null,env,{});
+    Eval(body,this.env);
+  }
 
-    this.env = env;
+  find(e)
+  {
+    // TODO: A Wrapper which adds additional layer of encapsulation
+    // which facilitates data hiding
   }
 }
 
-let keywords = ["begin", "lambda", "if", "set!"];
+let keywords = [
+  "begin", "lambda",
+  "if","else",
+  "define", "update",
+  "while", "for",
+  "defun","cluster",
+  "declu", "invoke",
+  "export"
+];
 
 function isPrimitive(value) {
     if (typeof value == "number") {
@@ -171,7 +187,7 @@ function isPrimitive(value) {
     }
 }
 
-function eval(code, env) {
+function Eval(code, env) {
     if (code === undefined) return;
     if (!Array.isArray(code) && isPrimitive(code)) {
         if (typeof code == "string") {
@@ -192,16 +208,16 @@ function eval(code, env) {
         return env.find(code).env[code];
     } else if (code[0] == "define") {
         let [define, name, value] = code;
-        env.env[name] = eval(value, env);
+        env.env[name] = Eval(value, env);
         return env.env[name];
     } else if (code[0] == "update") {
         let [update, name, value] = code;
-        return env.update(name,eval(value,env));
+        return env.update(name,Eval(value,env));
     } else if (code[0] == "begin") {
         let [begin, ...block] = code;
         let out = [];
         for (let exp of block) {
-            const o = eval(exp, env);
+            const o = Eval(exp, env);
             if (o != undefined) {
                 out.push(o);
             }
@@ -214,7 +230,7 @@ function eval(code, env) {
         return;
     } else if (code[0] == "for") {
         [_ , varname , __ , list , body] = code;
-        const jlist = eval(list,env);
+        const jlist = Eval(list,env);
         loop = new JFor(varname , jlist , body, env);
         loop.execute();
         return;
@@ -225,30 +241,30 @@ function eval(code, env) {
         [_ , name , params, body] = code;
         env.env[name] = new JFunctor(params, body, env);
         return env.env[name];
-    } else if(code[0] == "invoke")
-    {
+    } else if(code[0] == "invoke") {
         [ _ , func , args] = code;
-        let evaled_params = [];
+        let Evaled_params = [];
         for (let p of args) {
-            evaled_params.push(eval(p, env));
+            Evaled_params.push(Eval(p, env));
         }
-        lfunc = eval(func,env);
-        return lfunc.execute(evaled_params);
-    } else if(code[0] == "if" && code[3] == "else")
-    {
+        lfunc = Eval(func,env);
+        return lfunc.execute(Evaled_params);
+    } else if(code[0] == "if" && code[3] == "else") {
         [ _ , condition , ifBlock , __ , elseBlock] = code;
         IFELSE = new JIfElse(condition, ifBlock, elseBlock , env);
         IFELSE.execute();
         return;
-    } else if(code[0] == "if")
-    {
+    } else if(code[0] == "if") {
         [ _ , condition , body] = code;
         IF = new JIf(condition, body, env);
         IF.execute();
         return;
-    } else if(code[0] == "export")
-    {
+    } else if(code[0] == "export") {
 
+    }
+    else if(code[0] == "cluster") {
+        [ _ , body ] = code;
+        return new JCluster(body, env);
     }
     //else if (code[0] == "return") {
     //     console.log("In Return!");
@@ -259,21 +275,28 @@ function eval(code, env) {
     //         let [ret, exp] = code;
     //         console.log(code);
     //         console.log(exp);
-    //         return eval(exp, env);
+    //         return Eval(exp, env);
     //     }
     //}
     else {
         let [func, ...params] = code;
-        let call = eval(func, env);
-        let evaled_params = [];
-        for (let p of params) {
-            evaled_params.push(eval(p, env));
+        let call = Eval(func, env);
+        if (call instanceof JCluster) {
+            // console.log("Params");
+            // console.log(params);
+            return Eval(params,call.env);
         }
+        let Evaled_params = [];
+        for (let p of params) {
+            Evaled_params.push(Eval(p, env));
+        }
+        // console.log("Evaled Params");
+        // console.log(Evaled_params);
         if (call instanceof JFunctor) {
-            return call.execute(...evaled_params);
+            return call.execute(Evaled_params);
         }
         else if (call != undefined) {
-            return call(...evaled_params);
+            return call(...Evaled_params);
         }
     }
 }
@@ -337,11 +360,11 @@ const MAIN_ENV = new Env(null, null, null, {
     "not": (x) => !x
 });
 
-function ieval(code)
+function iEval(code)
 {
-  eval(code,MAIN_ENV);
+  Eval(code,MAIN_ENV);
 }
 
 
 // export
-module.exports = ieval;
+module.exports = iEval;
