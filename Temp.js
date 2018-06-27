@@ -59,7 +59,7 @@ let code =
       ]
     ],
 
-    [ "print" , ["C1", "v"] ]
+    [ "print" ,  ["C1", "v"] ]
 
     // ["declu", "C1"
     //   ["begin",
