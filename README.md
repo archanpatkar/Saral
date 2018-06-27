@@ -1,4 +1,4 @@
-# JISP ( JSON based List Processing )
+# SARAL ( JSON based List Processing )
 ### A Lisp like Language which uses S - Expressions.
 ### Its Syntax is in JSON.
 ### It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
