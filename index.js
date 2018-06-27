@@ -284,12 +284,12 @@ function Eval(code, env) {
         let call = Eval(func, env);
         if (call instanceof JCluster) {
             const out = Eval(...params,call.env);
-            console.log(call);
-            console.log("AST");
-            console.log(params);
-            console.log("Inside Cluster")
-            console.log(out);
-            console.log(call.env.find(...params).env[params[0]]);
+            // console.log(call);
+            // console.log("AST");
+            // console.log(params);
+            // console.log("Inside Cluster")
+            // console.log(out);
+            // console.log(call.env.find(...params).env[params[0]]);
             return out;
         }
         let Evaled_params = [];
