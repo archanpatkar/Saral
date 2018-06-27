@@ -163,8 +163,6 @@ let keywords = [
 ];
 
 function isPrimitive(value) {
-  console.log("Checking if Primitive");
-  console.log(value);
     if (typeof value == "number") {
         return true;
     } else if (typeof value == "boolean") {
@@ -205,11 +203,8 @@ function Eval(code, env) {
             }
             return output_string.join("");
         }
-        console.log("Returning Primitive Type");
-        console.log(code);
         return code;
     } else if (!Array.isArray(code) && !(code in keywords)) {
-        console.log("Variable : " + code);
         const out = env.find(code).env[code];
         return env.find(code).env[code];
     } else if (code[0] == "define") {
@@ -288,28 +283,17 @@ function Eval(code, env) {
         let [func, ...params] = code;
         let call = Eval(func, env);
         if (call instanceof JCluster) {
-            console.log("Params");
-            console.log(params);
-            console.log("Before Eval");
             const out = Eval(params,call.env);
-            console.log("Output");
-            console.log(out);
             return out;
         }
         let Evaled_params = [];
         for (let p of params) {
-            console.log("In Param Loop");
             Evaled_params.push(Eval(p, env));
         }
-        console.log("Evaled Params");
-        console.log(Evaled_params);
         if (call instanceof JFunctor) {
             return call.execute(Evaled_params);
         }
         else if (call != undefined) {
-            console.log("Last Case");
-            console.log(call.toString());
-            console.log(call);
             return call(...Evaled_params);
         }
     }
