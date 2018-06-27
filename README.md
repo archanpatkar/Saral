@@ -3,7 +3,7 @@
 ### Its Syntax is in JSON.
 ### It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
 
-### Features
+## Features
 #### 1. Variables
 #### 2. Functions
 #### 3. Lambdas
