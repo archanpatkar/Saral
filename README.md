@@ -1,5 +1,5 @@
-# SARAL ( JSON based List Processing )
-### A Lisp like Language which uses S - Expressions.
+# Saral
+### A Lisp like Language which uses S - Expressions ( JSON based ).
 ### Its Syntax is in JSON.
 ### It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
 
