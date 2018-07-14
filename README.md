@@ -6,14 +6,9 @@ Its Syntax is in JSON, It can be used as a Compilation Target Language or Interm
 1. Variables
 2. Functions
 3. Lambdas
-4. Iterations
-5. Clusters
-6. Structures
-8. Protocols
-9. Tables
-10. Objects
-11. Module System
-
+4. Higher Order Functions
+5. Iterations
+6. Clusters
 
 ## Example
 ```
