@@ -3,12 +3,6 @@
 ### Its Syntax is in JSON.
 ### It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
 
-## Paradigms
-### Procedural 
-### Functional
-### Modular
-### Object Oriented
-
 ## Features
 ### 1. Variables
 ### 2. Functions
