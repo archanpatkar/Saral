@@ -1,6 +1,7 @@
 # Saral
 ### A Lisp like Language which uses S - Expressions ( JSON based ).
 Its Syntax is in JSON, It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
+
 Saral is inspired by [jsonic](https://github.com/zaach/jsonic).
 
 ## Features
