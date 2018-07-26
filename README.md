@@ -1,6 +1,6 @@
 # Saral
-### A Lisp like Language which uses S - Expressions ( JSON based ).
-Its Syntax is in JSON, It can be used as a Compilation Target Language or Intermediate Representation Language (IR).
+### A 3.9kB Interpreter for a `Embeddable`,`Transferable`,`Persistable`,`Compressibe` Language
+Saral is a LISP or WASM (WAT) like language which uses S - Expressions in a JSON format which leads Saral code to highly Transferable as JSON one of most famous option for data transfer after XML, Due to NoSQL Databases (Mongo DB) JSON can now also be persisted and There are now many compression libraries (JSONC,lzstring) available which can compress JSON upto 30% which makes Saral a universally embeddable language and its interpreter is 3.9kB.
 
 Saral is inspired by [jsonic](https://github.com/zaach/jsonic).
 
