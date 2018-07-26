@@ -10,7 +10,7 @@ Saral is inspired by [jsonic](https://github.com/zaach/jsonic).
 3. Lambdas
 4. Higher Order Functions
 5. Iterations
-6. Clusters
+6. Selections
 
 ## Example Code
 ```
