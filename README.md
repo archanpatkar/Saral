@@ -6,7 +6,7 @@ Just as **Lambda Calculus** and **Functional Programming** paradigm introduced t
 
 Saral is inspired by [jsonic](https://github.com/zaach/jsonic).
 
-## Features
+## Building Blocks Available
 1. Variables
 2. Functions
 3. Lambdas
