@@ -1,0 +1,14 @@
+[define, C1 ,
+  [ cluster ,
+    [ begin ,
+      [ define, v, 10 ],
+      [ defun, f1 , [ x , y ],
+        [ begin,
+          [print, "F2!"],
+          [print, [+, "X = " , x] ],
+          [print, [+, "Y   = " , y] ]
+        ]
+      ]
+    ]
+  ]
+]
