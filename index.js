@@ -43,9 +43,6 @@ class JFunctor {
 
     execute(args) {
         const env = new Env(this.params, args, this.env, null);
-        // console.log("Inside Functor");
-        // console.log(this.params);
-        // console.log(args);
         return Eval(this.body, env);
     }
 }
@@ -283,22 +280,12 @@ function Eval(code, env) {
         let [func, ...params] = code;
         let call = Eval(func, env);
         if (call instanceof JCluster) {
-            // const out = ;
-            // console.log(call);
-            // console.log("AST");
-            // console.log(params);
-            // console.log("Inside Cluster")
-            // console.log(out);
-            // console.log(call.env.find(...params).env[params[0]]);
             return Eval(...params,call.env);
         }
         let Evaled_params = [];
         for (let p of params) {
             Evaled_params.push(Eval(p, env));
         }
-        // console.log(call);
-        // console.log(Evaled_params);
-        // console.log(env);
         if (call instanceof JFunctor) {
             return call.execute(Evaled_params);
         }
