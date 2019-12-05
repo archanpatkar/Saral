@@ -31,3 +31,14 @@ Saral is inspired by [jsonic](https://github.com/zaach/jsonic).
     ]
 ]
 ```
+```
+[ "begin",
+       ["define" , "i", 0],
+       [ "while" , ["/=","i",10] ,
+            [ "begin",
+                   [ "print",'"Hello"' ],
+                   [ "update" , "i" , ["++","i"] ]
+            ]
+       ]
+]
+```
