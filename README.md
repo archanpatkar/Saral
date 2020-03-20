@@ -16,28 +16,22 @@ Saral is inspired by [jsonic](https://github.com/zaach/jsonic).
 
 ## Example Code
 ```
-[
-    [
-        "begin", 
-        
-        [
-            "define", "f1", 
-                ["lambda", [],
-                    ["print", ' "F1 !!!!" ']
-                ]
-        ], 
-        
-        ["f1"]
-    ]
+["begin", 
+    ["define", "f1", 
+        ["lambda", [],
+            ["print", ' "F1 !!!!" ']
+        ]
+    ],        
+    ["f1"]
 ]
 ```
 ```
-[ "begin",
-       ["define" , "i", 0],
-       [ "while" , ["/=","i",10] ,
-            [ "begin",
-                   [ "print",'"Hello"' ],
-                   [ "update" , "i" , ["++","i"] ]
+["begin",
+       ["define", "i", 0],
+       ["while", ["/=", "i", 10],
+            ["begin",
+                   ["print", '"Hello"' ],
+                   ["update", "i", ["++","i"]]
             ]
        ]
 ]
